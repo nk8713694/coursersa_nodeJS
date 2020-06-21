@@ -1,0 +1,42 @@
+
+   npm install mongodb assert
+
+
+     mongod --dbpath=data --bind_ip 127.0.0.1
+
+  #in another command prompt
+       mongo
+
+     db
+     use conFusion
+     db
+     db.help()
+     db.dishes.insert({ name: "Uthappizza", description: "Test" });
+
+
+     var id = new ObjectId();
+     id.getTimestamp();
+
+In this exercise you will download and install MongoDB on your computer. You will then start a MongoDB server and interact with it using the Mongo REPL shell. At the end of this exercise, you will be able to:
+
+Download and Installing MongoDB
+Start the server and interact with it using the Mongo REPL shell
+Downloading and Installing MongoDB
+Go to http://www.mongodb.org, then download and install MongoDB as per the instructions given there.
+Create a folder named mongodb on your computer and create a subfolder under it named data.
+Move to the mongodb folder and then start the MongoDB server by typing the following at the prompt:
+
+Open another command window and then type the following at the command prompt to start the mongo REPL shell:
+
+The Mongo REPL shell will start running and give you a prompt to issue commands to the MongoDB server. At the Mongo REPL prompt, type the following commands one by one and see the resulting behavior:
+
+You will now create a collection named dishes, and insert a new dish document in the collection:
+
+Then to print out the dishes in the collection, type:
+
+Note the "_id" assigned to the dish.
+
+Next, we will learn the information encoded into the ObjectId by typing the following at the prompt:
+
+Type "exit" at the REPL prompt to exit the Mongo REPL.
+
