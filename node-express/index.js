@@ -4,6 +4,10 @@ const express = require('express'),
 const morgan = require('morgan');
 const dishRouter=require('./routes/dishRouter')
 
+const promoRouter=require('./routes/promoRouter')
+
+const leaderRoute=require('./routes/leaderRouter')
+
 const bodyParser=require('body-parser')
 
 const hostname = 'localhost';
@@ -14,6 +18,14 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 app.use('/dishes',dishRouter)
+app.use('/dishes/:dishId',dishRouter)
+
+
+app.use('/promotions',promoRouter)
+app.use('/promotions/:promoId',promoRouter)
+
+app.use('/leaders',leaderRoute)
+app.use('/leaders/:leaderId',leaderRoute)
 
 
 app.use(express.static(__dirname + '/public'));
