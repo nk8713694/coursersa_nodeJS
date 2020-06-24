@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-
+const dboper = require('./operations');
 
 const assert=require('assert')
 
@@ -20,29 +20,34 @@ MongoClient.connect(url,(err,client)=>{
    
     const collection=db.collection('dishes');
 
-    collection.insertOne({"name":"nk","description":"menu"},(err,result)=>{
-        assert.equal(err,null);
+   
+    dboper.insertDocument(db, { name: "Vadonut", description: "Test"},
+        "dishes", (result) => {
+            console.log("Insert Document:\n", result.ops);
 
-        console.log("after insert:\n");
-        console.log(result.ops); // gthis will tell how amny operations are carried out
+            dboper.findDocuments(db, "dishes", (docs) => {
+                console.log("Found Documents:\n", docs);
+
+                dboper.updateDocument(db, { name: "Vadonut" },
+                    { description: "Updated Test" }, "dishes",
+                    (result) => {
+                        console.log("Updated Document:\n", result.result);
+
+                        dboper.findDocuments(db, "dishes", (docs) => {
+                            console.log("Found Updated Documents:\n", docs);
+                            
+                            // db.dropCollection("dishes", (result) => {
+                            //     console.log("Dropped Collection: ", result);
+
+                            //     client.close();
+                            // });
+                        });
+                    });
+            });
+    });
         
-        collection.find({}).toArray((err,docs)=>{
-            assert.equal(err,null);
 
-            console.log("found the below items\n");
-            console.log(docs);
-
-            db.dropCollection('dishes',(err,result)=>{
-                assert.equal(err,null);
-                client.close();  
-
-            })
-            
-        });
-
-        
-
-    })
+  
 
 
 
