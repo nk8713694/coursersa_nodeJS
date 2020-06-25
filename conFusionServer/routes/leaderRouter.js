@@ -4,47 +4,58 @@ const express=require('express')
 const bodyParser=require('body-parser')
 
 const leaderRouter = express.Router();
+const Leader = require('../models/leaders.js');
 
 leaderRouter.use(bodyParser.json())
 
 leaderRouter.route('/')
-.all((req,res,next)=>{
-    res.statusCode=200;
-    res.setHeader('Content-Type','text/plain')
-    next();
-})
 .get((req,res,next)=>{
 
-    res.end('will send all the leaders to u')
+  Leader.find({})
+  .then((lead) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(lead);
+  }, (err) => next(err))
+  .catch((err) => next(err));
 })
 .post((req,res)=>{
 
-    res.end('will addd the leader: '+req.body.name+' with details '+
-    req.body.description)
+  Leader.create(req.body)
+  .then((lead) => {
+      console.log('leader Created ', lead);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(lead);
+  }, (err) => next(err))
+  .catch((err) => next(err));
 })
 .put((req,res)=>{
    
     res.statusCode=403;
-    res.end('Put operation not supproted on leader')
+    res.end('Put operation not supproted on promos')
   
 })
 .delete((req,res)=>{
-    res.end('deleting all the requests')
+  Leader.remove({})
+  .then((resp) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(resp);
+  }, (err) => next(err))
+  .catch((err) => next(err));    
 })
 
 leaderRouter.route('/:leaderId')
-.all((req,res,next)=>{
-     
-    res.statusCode=200;
-  
-    res.setHeader('Content-Type','text/plain');
-  
-    next();
-  
-  })
 .get((req,res,next)=>{
+  Leader.findById(req.params.leaderId)
+  .then((lead) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(lead);
+  }, (err) => next(err))
+  .catch((err) => next(err));
       
-      res.end('will send deatil leader '+req.params.leaderId+" "+" to u")
   })
 .post((req,res)=>{
   
@@ -55,15 +66,26 @@ leaderRouter.route('/:leaderId')
   
   })
 .put((req,res)=>{
-  res.write('will update the laeder '+req.params.leaderId+'\n')
-
-    res.end('will update the leader '+req.body.name + req.body.description)
-  
+  Promotion.findByIdAndUpdate(req.params.leaderId, {
+    $set: req.body
+}, { new: true })
+.then((lead) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json(lead);
+}, (err) => next(err))
+.catch((err) => next(err));
   
   })
 .delete((req,res)=>{
   
-  res.end('deleting leader'+req.params.leaderId)
+  Promotion.findByIdAndRemove(req.params.leaderId)
+  .then((resp) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(resp);
+  }, (err) => next(err))
+  .catch((err) => next(err));
   
   
   })
